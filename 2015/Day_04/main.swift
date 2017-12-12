@@ -1,3 +1,5 @@
+
+
 // MARK: - Public
 public func MD5(_ input: String) -> String {
   return hex_md5(input)
@@ -256,28 +258,30 @@ func zeroFillRightShift(_ num: Int32, _ count: Int32) -> Int32 {
   return Int32(bitPattern: value)
 }
 
+// Problem implementation by Evan starts here:
+
 extension String {
 	subscript (i: Int) -> Character {
     	return self[index(startIndex, offsetBy: i)]
   	}
 }
 
-func isCoin(_ input: String ) -> Bool {
-	return ( input[0] == "0" &&
-			 input[1] == "0" &&
-			 input[2] == "0" &&
-			 input[3] == "0" &&
-			 input[4] == "0" )
+func isCoin( input: String, zeroLength: Int = 5 ) -> Bool {
+	var test = true
+	for i in 0...(zeroLength - 1) {
+		test = test && ( input[i] == "0" ) 
+	}
+	return test
 }
 
 func hash( key: String, number: Int ) -> String {
 	return MD5( key + String( number ) )
 }
 
-func findNumber(_ key: String ) -> Int {
+func findNumber( key: String, zeroLength: Int = 5 ) -> Int {
 	var count = 0
 	while true {
-		if( isCoin( hash( key: key, number: count ) ) )
+		if( isCoin( input: hash( key: key, number: count ), zeroLength: zeroLength ) )
 		{
 			return count
 		}
@@ -285,8 +289,8 @@ func findNumber(_ key: String ) -> Int {
 	}
 }
 
-func testFind( key: String, number: Int ) -> Bool {
-	return ( findNumber( key ) == number )
+func testFind( key: String, number: Int, zeroLength: Int = 5 ) -> Bool {
+	return ( findNumber( key: key, zeroLength: zeroLength ) == number )
 }
 
-print( findNumber( "iwrupvqb" ) )
+print( findNumber( key: "iwrupvqb", zeroLength: 6 ) )
